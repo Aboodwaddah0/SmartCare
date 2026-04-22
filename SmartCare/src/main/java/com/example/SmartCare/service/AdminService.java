@@ -15,65 +15,48 @@ import java.util.List;
 @Service
 public class AdminService {
 
-    private final PatientRepository patientRepository ;
-    private final DoctorRepository doctorRepository;
-  private  final PasswordEncoder passwordEncoder;
-    public AdminService(PatientRepository patientRepository, DoctorRepository doctorRepository, PasswordEncoder passwordEncoder) {
-        this.patientRepository = patientRepository;
-        this.doctorRepository = doctorRepository;
-        this.passwordEncoder = passwordEncoder;
+    private final PatientService patientService;
+    private final DoctorService doctorService;
+
+    public AdminService(PatientRepository patientRepository, DoctorRepository doctorRepository, PatientService patientService, DoctorService doctorService, PasswordEncoder passwordEncoder) {
+        this.patientService = patientService;
+        this.doctorService = doctorService;
+
     }
 
     public void createPatient(UserDto.CreatePatientRequest request){
-
-        Patient patient = Patient.builder()
-                .fullName(request.getFullName())
-                .username(request.getUsername())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.PATIENT)
-                .phone(request.getPhone())
-                .age(request.getAge())
-                .gender(request.getGender())
-                .build();
-
-        patientRepository.save(patient);
+         patientService.createPatient(request);
     }
 
     public void createDoctor(UserDto.CreateDoctorRequest request){
-        Doctor doctor = Doctor.builder()
-                .fullName(request.getFullName())
-                .username(request.getUsername())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.DOCTOR)
-                .phone(request.getPhone())
-                .specialization(request.getSpecialization())
-                .build();
-
-        doctorRepository.save(doctor);
+       doctorService.createDoctor(request);
     }
 
     public void deletePatient(Long id){
-        patientRepository.deleteById(id);
+      patientService.deletePatient(id);
     }
     public void deleteDoctor(Long id){
-        doctorRepository.deleteById(id);
+        doctorService.deleteDoctor(id);
     }
 
     public Patient getPatientById(Long id){
-        return patientRepository.findById(id).orElse(null);
+
+        return patientService.getPatientById(id);
     }
 
     public Doctor getDoctorById(Long id){
-        return doctorRepository.findById(id).orElse(null);
+
+        return doctorService.getDoctorById(id);
     }
 
     public List<Patient> getAllPatients(){
-        return patientRepository.findAll();
+        return  patientService.getAllPatients();
     }
+
     public List<Doctor> getAllDoctors(){
-        return doctorRepository.findAll();
+
+        return doctorService.getAllDoctors();
     }
 
 }
+

@@ -2,6 +2,7 @@ package com.example.SmartCare.dto;
 
 import lombok.*;
 import jakarta.validation.constraints.NotBlank;
+import com.example.SmartCare.entity.Role;
 
 public class UserDto {
 
@@ -50,5 +51,45 @@ public class UserDto {
         private String experience;
         private String profilePic;
 
+    }
+
+
+
+
+
+
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    @Getter
+    @Setter
+    public static class DoctorResponse {
+        private Long id;
+        private String fullName;
+        private String username;
+        private String email;
+        private String phone;
+        private String specialization;
+        private String experience;
+        private String profilePic;
+        private String availability;
+        private Role role;
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    @Getter
+    @Setter
+    public static class PatientResponse {
+        private Long id;
+        private String fullName;
+        private String username;
+        private String email;
+        private String phone;
+        private String age;
+        private String gender;
+        private Role role;
     }
 }

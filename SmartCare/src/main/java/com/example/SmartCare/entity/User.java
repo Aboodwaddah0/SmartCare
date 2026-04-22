@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-@Entity
+@Entity(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
