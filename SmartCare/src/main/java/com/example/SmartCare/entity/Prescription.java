@@ -1,15 +1,20 @@
 package com.example.SmartCare.entity;
 
-
-
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.Id;
+import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 import java.util.List;
+import lombok.*;
+@Document(collection = "prescriptions")
 
-@Document(collection = "medical_records")
-public class MedicalRecord {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Prescription {
 
     @Id
     private String id;
@@ -20,13 +25,12 @@ public class MedicalRecord {
 
     private LocalDate date;
 
-    private String diagnosis;
+    private List<Medicine> medicines;
     private String notes;
-
-    private List<String> allergies;
-    private List<String> chronicDiseases;
-
     private List<LabResult> labResults;
 
 
+
+
 }
+
