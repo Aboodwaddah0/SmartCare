@@ -23,8 +23,6 @@ public class UserDto {
         private String email;
         @NotBlank(message = "Phone cannot be blank")
         private String phone;
-        @NotBlank(message = "Age cannot be blank")
-        private String age;
         @NotBlank(message = "Gender cannot be blank")
         private String gender;
     }
@@ -47,7 +45,7 @@ public class UserDto {
         @NotBlank(message = "Phone cannot be blank")
         private String phone;
         @NotBlank(message = "Specialization cannot be blank")
-        private String specialization;
+        private String specialty;
         private String experience;
         private String profilePic;
 
@@ -70,10 +68,9 @@ public class UserDto {
         private String username;
         private String email;
         private String phone;
-        private String specialization;
+        private String specialty;
         private String experience;
         private String profilePic;
-        private String availability;
         private Role role;
     }
 
@@ -88,7 +85,7 @@ public class UserDto {
         private String username;
         private String email;
         private String phone;
-        private String age;
+        private String dateOfBirth;
         private String gender;
         private Role role;
     }

@@ -20,7 +20,7 @@ public class DoctorService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void createDoctor(UserDto.CreateDoctorRequest request){
+    public void createDoctor(UserDto.CreateDoctorRequest request) {
 
         if (doctorRepository.findByUsername(request.getUsername()).isPresent() ||
                 doctorRepository.findByEmail(request.getEmail()).isPresent()) {
@@ -29,11 +29,13 @@ public class DoctorService {
         Doctor doctor = Doctor.builder()
                 .fullName(request.getFullName())
                 .username(request.getUsername())
-                .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.DOCTOR)
+                .email(request.getEmail())
                 .phone(request.getPhone())
-                .specialization(request.getSpecialization())
+                .role(Role.DOCTOR)
+                .specialty(request.getSpecialty())
+                .experience(request.getExperience())
+                .profilePic(request.getProfilePic())
                 .build();
 
         doctorRepository.save(doctor);
@@ -63,12 +65,12 @@ public class DoctorService {
         existingDoctor.setFullName(doctor.getFullName());
         existingDoctor.setEmail(doctor.getEmail());
         existingDoctor.setPhone(doctor.getPhone());
-        existingDoctor.setSpecialization(doctor.getSpecialization());
+        existingDoctor.setSpecialty(doctor.getSpecialty());
        return   doctorRepository.save(existingDoctor);
 
     }
     public List<Doctor> getDoctorsBySpecialty(String Specialty){
-        return doctorRepository.findBySpecializationIgnoreCase(Specialty).stream().toList();
+        return doctorRepository.findBySpecialtyIgnoreCase(Specialty).stream().toList();
     }
 
 

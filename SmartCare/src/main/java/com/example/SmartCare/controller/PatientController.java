@@ -77,7 +77,7 @@ public class PatientController {
                 .username(patient.getUsername())
                 .email(patient.getEmail())
                 .phone(patient.getPhone())
-                .age(patient.getAge())
+                .dateOfBirth(patient.getDateOfBirth() != null ? patient.getDateOfBirth().toString() : null)
                 .gender(patient.getGender())
                 .role(patient.getRole())
                 .build();

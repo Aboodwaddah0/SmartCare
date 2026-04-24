@@ -73,10 +73,9 @@ public class DoctorController {
                 .username(doctor.getUsername())
                 .email(doctor.getEmail())
                 .phone(doctor.getPhone())
-                .specialization(doctor.getSpecialization())
+                .specialty(doctor.getSpecialty())
                 .experience(doctor.getExperience())
                 .profilePic(doctor.getProfilePic())
-                .availability(doctor.getAvailability())
                 .role(doctor.getRole())
                 .build();
     }

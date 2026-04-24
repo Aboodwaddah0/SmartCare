@@ -12,7 +12,6 @@ import java.util.List;
 @Service
 public class PatientService {
 
-
     private final PatientRepository patientRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -22,7 +21,6 @@ public class PatientService {
     }
 
     public void createPatient(UserDto.CreatePatientRequest request) {
-
         if (patientRepository.findByUsername(request.getUsername()).isPresent() ||
                 patientRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("Username or Email already exists");
@@ -35,7 +33,6 @@ public class PatientService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.PATIENT)
                 .phone(request.getPhone())
-                .age(request.getAge())
                 .gender(request.getGender())
                 .build();
 
@@ -54,7 +51,6 @@ public class PatientService {
     }
 
     public List<Patient> getAllPatients() {
-
         return patientRepository.findAll();
     }
 
@@ -66,11 +62,8 @@ public class PatientService {
         existingPatient.setFullName(patient.getFullName());
         existingPatient.setEmail(patient.getEmail());
         existingPatient.setPhone(patient.getPhone());
-        existingPatient.setAge(patient.getAge());
         existingPatient.setGender(patient.getGender());
         return patientRepository.save(existingPatient);
-
-
     }
 
     public List<Patient> getPatientByName(String name) {
