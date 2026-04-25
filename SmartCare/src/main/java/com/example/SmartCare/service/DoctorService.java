@@ -3,7 +3,11 @@ package com.example.SmartCare.service;
 import com.example.SmartCare.dto.UserDto;
 import com.example.SmartCare.entity.Doctor;
 import com.example.SmartCare.entity.Role;
+import com.example.SmartCare.entity.User;
+import com.example.SmartCare.exception.ResourceAlreadyExistsException;
+import com.example.SmartCare.exception.ResourceNotFoundException;
 import com.example.SmartCare.repository.DoctorRepository;
+import com.example.SmartCare.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,26 +17,35 @@ import java.util.List;
 public class DoctorService {
 
     private final DoctorRepository doctorRepository;
+    private final UserRepository userRepository;
     private  final PasswordEncoder passwordEncoder;
 
-    public DoctorService(DoctorRepository doctorRepository, PasswordEncoder passwordEncoder) {
+    public DoctorService(DoctorRepository doctorRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.doctorRepository = doctorRepository;
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     public void createDoctor(UserDto.CreateDoctorRequest request) {
 
-        if (doctorRepository.findByUsername(request.getUsername()).isPresent() ||
-                doctorRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("Username or Email already exists");
+        if (userRepository.findByUsername(request.getUsername()).isPresent() ||
+                userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new ResourceAlreadyExistsException("Username or Email already exists");
         }
-        Doctor doctor = Doctor.builder()
+
+        User user = User.builder()
                 .fullName(request.getFullName())
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
                 .phone(request.getPhone())
                 .role(Role.DOCTOR)
+                .build();
+
+        User savedUser = userRepository.save(user);
+
+        Doctor doctor = Doctor.builder()
+                .user(savedUser)
                 .specialty(request.getSpecialty())
                 .experience(request.getExperience())
                 .profilePic(request.getProfilePic())
@@ -42,14 +55,12 @@ public class DoctorService {
     }
 
     public void deleteDoctor(Long id){
-        if (!doctorRepository.existsById(id)) {
-            throw new RuntimeException("Doctor not found");
-        }
-        doctorRepository.deleteById(id);
+        Doctor doctor = doctorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
+        userRepository.delete(doctor.getUser());
+        doctorRepository.delete(doctor);
     }
 
     public Doctor getDoctorById(Long id){
-
         return doctorRepository.findById(id).orElse(null);
     }
 
@@ -57,22 +68,23 @@ public class DoctorService {
         return doctorRepository.findAll();
     }
 
-    public Doctor updateDoctor(Long id, Doctor doctor){
-        Doctor existingDoctor = doctorRepository.findById(id).orElse(null);
-        if (existingDoctor == null) {
-            throw new RuntimeException("Doctor not found");
-        }
-        existingDoctor.setFullName(doctor.getFullName());
-        existingDoctor.setEmail(doctor.getEmail());
-        existingDoctor.setPhone(doctor.getPhone());
-        existingDoctor.setSpecialty(doctor.getSpecialty());
-       return   doctorRepository.save(existingDoctor);
+    public Doctor updateDoctor(Long id, Doctor doctorUpdate){
+        Doctor existingDoctor = doctorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
+        User user = existingDoctor.getUser();
+        user.setFullName(doctorUpdate.getUser().getFullName());
+        user.setEmail(doctorUpdate.getUser().getEmail());
+        user.setPhone(doctorUpdate.getUser().getPhone());
+        userRepository.save(user);
 
-    }
-    public List<Doctor> getDoctorsBySpecialty(String Specialty){
-        return doctorRepository.findBySpecialtyIgnoreCase(Specialty).stream().toList();
+        existingDoctor.setSpecialty(doctorUpdate.getSpecialty());
+        existingDoctor.setExperience(doctorUpdate.getExperience());
+        existingDoctor.setProfilePic(doctorUpdate.getProfilePic());
+        return doctorRepository.save(existingDoctor);
     }
 
+    public List<Doctor> getDoctorsBySpecialty(String specialty){
+        return doctorRepository.findBySpecialtyIgnoreCase(specialty).stream().toList();
+    }
 
 
 

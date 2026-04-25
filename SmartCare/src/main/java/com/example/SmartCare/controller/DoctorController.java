@@ -69,14 +69,14 @@ public class DoctorController {
     private DoctorResponse mapToDoctorResponse(Doctor doctor) {
         return DoctorResponse.builder()
                 .id(doctor.getId())
-                .fullName(doctor.getFullName())
-                .username(doctor.getUsername())
-                .email(doctor.getEmail())
-                .phone(doctor.getPhone())
+                .fullName(doctor.getUser().getFullName())
+                .username(doctor.getUser().getUsername())
+                .email(doctor.getUser().getEmail())
+                .phone(doctor.getUser().getPhone())
                 .specialty(doctor.getSpecialty())
                 .experience(doctor.getExperience())
                 .profilePic(doctor.getProfilePic())
-                .role(doctor.getRole())
+                .role(doctor.getUser().getRole())
                 .build();
     }
 

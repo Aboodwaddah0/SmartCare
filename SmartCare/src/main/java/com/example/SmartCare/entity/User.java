@@ -1,6 +1,5 @@
 package com.example.SmartCare.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

@@ -73,13 +73,13 @@ public class PatientController {
     private PatientResponse mapToPatientResponse(Patient patient) {
         return PatientResponse.builder()
                 .id(patient.getId())
-                .fullName(patient.getFullName())
-                .username(patient.getUsername())
-                .email(patient.getEmail())
-                .phone(patient.getPhone())
+                .fullName(patient.getUser().getFullName())
+                .username(patient.getUser().getUsername())
+                .email(patient.getUser().getEmail())
+                .phone(patient.getUser().getPhone())
                 .dateOfBirth(patient.getDateOfBirth() != null ? patient.getDateOfBirth().toString() : null)
                 .gender(patient.getGender())
-                .role(patient.getRole())
+                .role(patient.getUser().getRole())
                 .build();
     }
 

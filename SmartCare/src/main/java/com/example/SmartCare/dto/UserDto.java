@@ -4,6 +4,8 @@ import lombok.*;
 import jakarta.validation.constraints.NotBlank;
 import com.example.SmartCare.entity.Role;
 
+import java.time.LocalDate;
+
 public class UserDto {
 
     @NoArgsConstructor
@@ -25,6 +27,9 @@ public class UserDto {
         private String phone;
         @NotBlank(message = "Gender cannot be blank")
         private String gender;
+        private LocalDate dateOfBirth;
+        private String address;
+        private String bloodType;
     }
 
     @NoArgsConstructor
@@ -87,6 +92,8 @@ public class UserDto {
         private String phone;
         private String dateOfBirth;
         private String gender;
+        private String address;
+        private String bloodType;
         private Role role;
     }
 }
