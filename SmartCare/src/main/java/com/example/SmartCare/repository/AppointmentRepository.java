@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AppointmentRepository  extends JpaRepository<Appointment, Long> {
-    @Query("SELECT a.timeSlot FROM Appointment a " +
+    @Query("SELECT a.time FROM Appointment a " +
             "WHERE a.doctor.id = :doctorId AND a.date = :date")
     List<LocalTime> findBookedSlots(@Param("doctorId") Long doctorId,
                                     @Param("date") LocalDate date);

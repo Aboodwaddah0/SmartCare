@@ -4,6 +4,7 @@ package com.example.SmartCare.service;
 import com.example.SmartCare.dto.AuthDto;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -25,14 +26,20 @@ public class AuthService {
 
     public String login(AuthDto.LoginRequest request) {
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsername(),
+                            request.getPassword()
+                    )
+            );
+        } catch (Exception e) {
+            throw new BadCredentialsException("Invalid username or password");
+        }
+
         UserDetails userDetails =
                 userDetailsService.loadUserByUsername(request.getUsername());
+
         return jwtService.generateToken(userDetails);
     }
 }

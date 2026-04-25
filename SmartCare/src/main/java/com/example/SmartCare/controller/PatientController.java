@@ -22,7 +22,7 @@ public class PatientController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> createPatient(@RequestBody UserDto.CreatePatientRequest request) {
         patientService.createPatient(request);
         return ResponseEntity.ok("Patient created successfully");
@@ -30,7 +30,7 @@ public class PatientController {
 
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_DOCTOR') or hasRole('ROLE_PATIENT')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR') or hasRole('PATIENT')")
     public ResponseEntity<PatientResponse> getPatientById(@PathVariable Long id) {
         Patient patient = patientService.getPatientById(id);
         if (patient == null) {
@@ -40,7 +40,7 @@ public class PatientController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_DOCTOR')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR')")
     public ResponseEntity<List<PatientResponse>> getAllPatients() {
         List<PatientResponse> responses = patientService.getAllPatients().stream()
                 .map(this::mapToPatientResponse)
@@ -49,21 +49,21 @@ public class PatientController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deletePatient(@PathVariable Long id) {
         patientService.deletePatient(id);
         return ResponseEntity.ok("Patient deleted successfully");
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PATIENT')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PATIENT')")
     public ResponseEntity<PatientResponse> updatePatient(@PathVariable Long id, @RequestBody Patient patient) {
         Patient updatedPatient = patientService.updatePatient(id, patient);
         return ResponseEntity.ok(mapToPatientResponse(updatedPatient));
     }
 
     @GetMapping("/search/{username}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_DOCTOR') or hasRole('ROLE_PATIENT')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR') or hasRole('PATIENT')")
     public ResponseEntity<List<PatientResponse>> searchPatientByUsername(@PathVariable String username) {
         List<Patient> patient = patientService.getPatientByName(username);
        List <PatientResponse> patientResponses=patient.stream().map(this::mapToPatientResponse).toList();

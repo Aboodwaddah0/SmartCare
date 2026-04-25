@@ -21,12 +21,12 @@ public class DoctorController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> createDoctor(@RequestBody UserDto.CreateDoctorRequest request) {
         doctorService.createDoctor(request);
         return ResponseEntity.ok("Doctor created successfully");
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_DOCTOR') or hasRole('ROLE_PATIENT')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR') or hasRole('PATIENT')")
     @GetMapping("/{id}")
     public ResponseEntity<DoctorResponse> getDoctorById(@PathVariable Long id) {
         Doctor doctor = doctorService.getDoctorById(id);
@@ -56,7 +56,7 @@ public class DoctorController {
         return ResponseEntity.ok(mapToDoctorResponse(updatedDoctor));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PATIENT') ")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PATIENT') ")
     @GetMapping("/specialty/{specialty}")
     public ResponseEntity<List<DoctorResponse>> getDoctorsBySpecialty(@PathVariable String specialty) {
         List<Doctor> doctors = doctorService.getDoctorsBySpecialty(specialty);

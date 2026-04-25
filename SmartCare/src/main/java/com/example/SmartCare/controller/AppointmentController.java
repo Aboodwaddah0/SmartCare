@@ -5,6 +5,7 @@ import com.example.SmartCare.dto.AppointmentDto;
 import com.example.SmartCare.entity.Appointment;
 import com.example.SmartCare.service.AppointmentService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -22,17 +23,18 @@ public class AppointmentController {
  }
 
 
- @GetMapping("/doctor/{doctorId}")
- public ResponseEntity<List<Appointment>> getAppointmentsDoctor(
-         @PathVariable Long doctorId,
-         @RequestParam LocalDate date) {
+@GetMapping("/doctor/{doctorId}")
+  @PreAuthorize("hasAnyRole('DOCTOR','ADMIN')")
+  public ResponseEntity<List<Appointment>> getAppointmentsDoctor(
+          @PathVariable Long doctorId,
+          @RequestParam LocalDate date) {
 
-  return ResponseEntity.ok(
-          appointmentService.getAllAppointments(doctorId, date)
-  );
- }
+   return ResponseEntity.ok(
+           appointmentService.getAllAppointments(doctorId, date)
+   );
+  }
 
-
+ @PreAuthorize("hasRole('PATIENT')")
  @PostMapping
  public ResponseEntity<Appointment> bookAppointment(
          @RequestBody AppointmentDto.BookingRequest request) {
@@ -42,7 +44,7 @@ public class AppointmentController {
   );
  }
 
-
+ @PreAuthorize("hasRole('PATIENT')")
  @DeleteMapping("/{appointmentId}")
  public ResponseEntity<String> cancelAppointment(
          @PathVariable Long appointmentId) {
@@ -51,14 +53,13 @@ public class AppointmentController {
   return ResponseEntity.ok("Appointment cancelled successfully");
  }
 
-
- @GetMapping("/available-slots")
+ @PreAuthorize("isAuthenticated()")
+ @GetMapping("/{doctorId}/available-slots")
  public ResponseEntity<List<LocalTime>> getAvailableSlots(
-         @RequestParam Long doctorId,
+         @PathVariable Long doctorId,
          @RequestParam LocalDate date) {
 
-  return ResponseEntity.ok(
-          appointmentService.getAvailableSlots(doctorId, date)
+  return ResponseEntity.ok(appointmentService.getAvailableSlots(doctorId, date)
   );
  }
 }

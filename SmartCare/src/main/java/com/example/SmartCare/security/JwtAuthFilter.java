@@ -41,7 +41,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String username = null;
 
         try {
-            // ✅ حماية من أي JWT error
+
             if (jwt == null || !jwt.contains(".")) {
                 filterChain.doFilter(request, response);
                 return;
@@ -50,7 +50,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             username = jwtService.extractUsername(jwt);
 
         } catch (JwtException | IllegalArgumentException e) {
-            // ❌ token invalid → تجاهل الطلب بدون crash
+
             filterChain.doFilter(request, response);
             return;
         }
