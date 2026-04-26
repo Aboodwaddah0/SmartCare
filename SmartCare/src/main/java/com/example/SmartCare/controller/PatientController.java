@@ -2,6 +2,7 @@ package com.example.SmartCare.controller;
 
 import com.example.SmartCare.dto.UserDto;
 import com.example.SmartCare.dto.UserDto.PatientResponse;
+import com.example.SmartCare.dto.ApiResponse;
 import com.example.SmartCare.entity.Patient;
 import com.example.SmartCare.service.PatientService;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +22,11 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    @PostMapping
+@PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> createPatient(@RequestBody UserDto.CreatePatientRequest request) {
+    public ResponseEntity<ApiResponse> createPatient(@RequestBody UserDto.CreatePatientRequest request) {
         patientService.createPatient(request);
-        return ResponseEntity.ok("Patient created successfully");
+        return ResponseEntity.ok(ApiResponse.success("Patient created successfully"));
     }
 
 
@@ -50,9 +51,9 @@ public class PatientController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> deletePatient(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse> deletePatient(@PathVariable Long id) {
         patientService.deletePatient(id);
-        return ResponseEntity.ok("Patient deleted successfully");
+        return ResponseEntity.ok(ApiResponse.success("Patient deleted successfully"));
     }
 
     @PutMapping("/{id}")

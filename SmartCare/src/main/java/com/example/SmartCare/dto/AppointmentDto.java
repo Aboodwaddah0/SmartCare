@@ -22,4 +22,29 @@ public class AppointmentDto {
 
     }
 
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    @Getter
+    @Setter
+    public static class BookingResponse {
+
+        private Long doctorId;
+        private Long patientId;
+        private LocalDate date;
+        private LocalTime time;
+
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class AppointmentResponse {
+        private Long id;
+        private Long doctorId;
+        private Long patientId;
+        private LocalDate date;
+        private LocalTime time;
+        private String status;
+    }
 }

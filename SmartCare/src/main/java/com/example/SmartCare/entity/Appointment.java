@@ -1,5 +1,6 @@
 package com.example.SmartCare.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -25,6 +26,7 @@ public class Appointment {
 
     @ManyToOne
     @JoinColumn(name = "doctor_id")
+    @JsonIgnore
     private Doctor doctor;
 
     @ManyToOne

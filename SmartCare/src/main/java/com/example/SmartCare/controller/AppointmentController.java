@@ -2,8 +2,13 @@ package com.example.SmartCare.controller;
 
 
 import com.example.SmartCare.dto.AppointmentDto;
+import com.example.SmartCare.dto.PrescriptionDto;
+import com.example.SmartCare.dto.ApiResponse;
 import com.example.SmartCare.entity.Appointment;
+import com.example.SmartCare.entity.Prescription;
+import com.example.SmartCare.repository.AppointmentRepository;
 import com.example.SmartCare.service.AppointmentService;
+import com.example.SmartCare.service.PrescriptionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,43 +23,43 @@ public class AppointmentController {
 
  private final AppointmentService appointmentService;
 
- public AppointmentController(AppointmentService appointmentService) {
+ public AppointmentController(AppointmentService appointmentService, AppointmentRepository appointmentRepository, PrescriptionService prescriptionService) {
   this.appointmentService = appointmentService;
+
+
  }
 
 
-@GetMapping("/doctor/{doctorId}")
-  @PreAuthorize("hasAnyRole('DOCTOR','ADMIN')")
-  public ResponseEntity<List<Appointment>> getAppointmentsDoctor(
-          @PathVariable Long doctorId,
-          @RequestParam LocalDate date) {
+    @GetMapping("/doctor/{doctorId}")
+    @PreAuthorize("hasAnyRole('DOCTOR','ADMIN')")
+    public ResponseEntity<List<AppointmentDto.AppointmentResponse>> getAppointmentsDoctor(
+            @PathVariable Long doctorId,
+            @RequestParam LocalDate date) {
 
-   return ResponseEntity.ok(
-           appointmentService.getAllAppointments(doctorId, date)
-   );
+        return ResponseEntity.ok(
+                appointmentService.getAllAppointments(doctorId, date)
+        );
+    }
+
+@PreAuthorize("hasRole('PATIENT')")
+  @PostMapping("")
+  public ResponseEntity<ApiResponse> bookAppointment(
+          @RequestBody AppointmentDto.BookingRequest request) {
+   appointmentService.bookAppointment(request);
+   return ResponseEntity.ok(ApiResponse.success("Appointment booked successfully"));
   }
 
- @PreAuthorize("hasRole('PATIENT')")
- @PostMapping
- public ResponseEntity<Appointment> bookAppointment(
-         @RequestBody AppointmentDto.BookingRequest request) {
+@PreAuthorize("hasRole('PATIENT')")
+  @PatchMapping ("/{appointmentId}")
+  public ResponseEntity<ApiResponse> cancelAppointment(
+          @PathVariable Long appointmentId) {
 
-  return ResponseEntity.ok(
-          appointmentService.bookAppointment(request)
-  );
- }
-
- @PreAuthorize("hasRole('PATIENT')")
- @DeleteMapping("/{appointmentId}")
- public ResponseEntity<String> cancelAppointment(
-         @PathVariable Long appointmentId) {
-
-  appointmentService.cancel(appointmentId);
-  return ResponseEntity.ok("Appointment cancelled successfully");
- }
+   appointmentService.cancel(appointmentId);
+   return ResponseEntity.ok(ApiResponse.success("Appointment cancelled successfully"));
+  }
 
  @PreAuthorize("isAuthenticated()")
- @GetMapping("/{doctorId}/available-slots")
+ @GetMapping("/available-slots/{doctorId}")
  public ResponseEntity<List<LocalTime>> getAvailableSlots(
          @PathVariable Long doctorId,
          @RequestParam LocalDate date) {
@@ -62,4 +67,7 @@ public class AppointmentController {
   return ResponseEntity.ok(appointmentService.getAvailableSlots(doctorId, date)
   );
  }
+
+
+
 }

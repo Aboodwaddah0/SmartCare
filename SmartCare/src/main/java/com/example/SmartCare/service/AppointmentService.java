@@ -36,7 +36,7 @@ public AppointmentService(DoctorRepository doctorRepository, PatientRepository p
 }
 
 
-public Appointment  bookAppointment(AppointmentDto.BookingRequest request){
+public void  bookAppointment(AppointmentDto.BookingRequest request){
 
     Doctor doctor = doctorRepository.findById(request.getDoctorId())
             .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + request.getDoctorId()));
@@ -66,7 +66,7 @@ public Appointment  bookAppointment(AppointmentDto.BookingRequest request){
             .build();
 
     try {
-        return appointmentRepository.save(appointment);
+      appointmentRepository.save(appointment);
     } catch (DataIntegrityViolationException e) {
         throw new SlotAlreadyTakenException("Time slot already taken (concurrent booking)");
     }
@@ -97,12 +97,12 @@ public Appointment  bookAppointment(AppointmentDto.BookingRequest request){
 
 
 
-    public List<Appointment> getAllAppointments(Long doctorId, LocalDate date){
+    public List<AppointmentDto.AppointmentResponse> getAllAppointments(Long doctorId, LocalDate date){
 
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + doctorId));
 
-     return appointmentRepository.findByDoctorIdAndDateOrderByTimeAsc(doctorId,date).stream().toList();
+     return appointmentRepository.findByDoctorIdAndDateOrderByTimeAsc(doctorId,date).stream().map(this::toDto).toList();
 
 
     }
@@ -133,6 +133,17 @@ private boolean isSlotValid(DoctorSchedule schedule, LocalTime requestedTime) {
             cursor = cursor.plusMinutes(schedule.getDuration());
         }
         return false;
+    }
+
+    public AppointmentDto.AppointmentResponse toDto(Appointment a) {
+        return AppointmentDto.AppointmentResponse.builder()
+                .id(a.getId())
+                .doctorId(a.getDoctor().getId())
+                .patientId(a.getPatient().getId())
+                .date(a.getDate())
+                .time(a.getTime())
+                .status(a.getStatus().name())
+                .build();
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.SmartCare.controller;
 
 import com.example.SmartCare.dto.AuthDto;
+import com.example.SmartCare.dto.ApiResponse;
 import com.example.SmartCare.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,10 +20,10 @@ public class AuthController  {
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
-    @PostMapping("/login")
-    public ResponseEntity<String> login ( @RequestBody  AuthDto.LoginRequest request){
-      return ResponseEntity.ok(authService.login(request));
-  }
+@PostMapping("/login")
+    public ResponseEntity<ApiResponse> login ( @RequestBody  AuthDto.LoginRequest request){
+      return ResponseEntity.ok(ApiResponse.success(authService.login(request)));
+   }
 
 
 }
