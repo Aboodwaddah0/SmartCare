@@ -39,9 +39,6 @@ public class Patient {
     @Builder.Default
     private List<Appointment> appointments = new ArrayList<>();
 
-    public int getAge() {
-        if (dateOfBirth == null) return 0;
-        return LocalDate.now().getYear() - dateOfBirth.getYear();
-    }
+
 
 }

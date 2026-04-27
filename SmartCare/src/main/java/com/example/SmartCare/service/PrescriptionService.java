@@ -1,8 +1,10 @@
 package com.example.SmartCare.service;
 
 import com.example.SmartCare.dto.PrescriptionDto;
+import com.example.SmartCare.entity.Appointment;
 import com.example.SmartCare.entity.Prescription;
 import com.example.SmartCare.exception.ResourceNotFoundException;
+import com.example.SmartCare.repository.AppointmentRepository;
 import com.example.SmartCare.repository.PrescriptionRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +14,10 @@ import java.util.List;
 public class PrescriptionService {
 
     private final PrescriptionRepository prescriptionRepository;
-
-    public PrescriptionService(PrescriptionRepository prescriptionRepository) {
+   private final AppointmentRepository appointmentRepository;
+    public PrescriptionService(PrescriptionRepository prescriptionRepository, AppointmentRepository appointmentRepository) {
         this.prescriptionRepository = prescriptionRepository;
+        this.appointmentRepository = appointmentRepository;
     }
 
     public List<PrescriptionDto.PrescriptionResponse> viewPrescription(Long patientId) {
@@ -28,8 +31,16 @@ public class PrescriptionService {
     public PrescriptionDto.PrescriptionResponse createPrescription(
             PrescriptionDto.prescriptionRequest request) {
 
+        Appointment appointment = appointmentRepository.findById(request.getAppointmentId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Appointment not found with id: " + request.getAppointmentId()
+                ));
+
+
         Prescription prescription = Prescription.builder()
-                .patientId(request.getPatientId())
+                .patientId(appointment.getPatient().getId())
+                .doctorId(appointment.getDoctor().getId())
+                .appointmentId(request.getAppointmentId())
                 .medicines(request.getMedicines())
                 .notes(request.getNotes())
                 .build();
@@ -63,10 +74,19 @@ public class PrescriptionService {
         prescriptionRepository.delete(prescription);
     }
 
+
+
+    public List<PrescriptionDto.PrescriptionResponse> getPrescriptionsByPatient(Long patientId){
+      return    prescriptionRepository.findByPatientId(patientId).stream()
+                .map(this::mapToDto).toList();
+    }
+
     private PrescriptionDto.PrescriptionResponse mapToDto(Prescription p) {
         return PrescriptionDto.PrescriptionResponse.builder()
                 .id(p.getId())
                 .patientId(p.getPatientId())
+                .doctorId(p.getDoctorId())
+                .appointmentId(p.getAppointmentId())
                 .medicines(p.getMedicines())
                 .notes(p.getNotes())
                 .build();

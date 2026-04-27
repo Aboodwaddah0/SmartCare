@@ -18,21 +18,14 @@ public class MedicalRecord {
 
     @Id
     private String id;
-
     private Long patientId;
     private Long doctorId;
     private Long appointmentId;
-
     private LocalDate date;
-
     private String diagnosis;
     private String notes;
-
     private List<String> allergies;
     private List<String> chronicDiseases;
-
-    private List<Medicine> medicines;
     private List<LabResult> labResults;
-
 
 }

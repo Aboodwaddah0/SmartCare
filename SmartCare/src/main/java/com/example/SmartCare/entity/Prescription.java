@@ -17,8 +17,9 @@ public class Prescription {
 
     @Id
     private String id;
-
     private Long patientId;
+    private Long doctorId;
+    private Long appointmentId;
 
     private List<Medicine> medicines;
     private String notes;

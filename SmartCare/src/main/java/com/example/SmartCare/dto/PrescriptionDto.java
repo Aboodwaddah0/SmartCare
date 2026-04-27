@@ -12,7 +12,7 @@ public class PrescriptionDto {
     @Getter
     @Setter
     public static class prescriptionRequest {
-        private Long patientId;
+        private Long appointmentId;
         private List<Medicine> medicines;
         private String notes;
     }
@@ -26,6 +26,8 @@ public class PrescriptionDto {
     public static class PrescriptionResponse {
         private String id;
         private Long patientId;
+        private Long doctorId;
+        private Long appointmentId;
         private List<Medicine> medicines;
         private String notes;
     }

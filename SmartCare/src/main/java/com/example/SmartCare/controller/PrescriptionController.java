@@ -7,8 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/prescription")
+@RequestMapping("/api/prescriptions")
 public class PrescriptionController {
 
     private final PrescriptionService prescriptionService;
@@ -52,8 +54,7 @@ public class PrescriptionController {
         );
     }
 
-
-    @PreAuthorize("hasAnyRole('PATIENT','DOCTOR','ADMIN')")
+    @PreAuthorize("hasAnyRole('PATIENT','DOCTOR')")
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<?> getPatientPrescriptions(@PathVariable Long patientId) {
 

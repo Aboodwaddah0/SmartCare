@@ -1,7 +1,7 @@
 package com.example.SmartCare.dto;
 
 import com.example.SmartCare.entity.LabResult;
-import com.example.SmartCare.entity.Medicine;
+import com.example.SmartCare.entity.Prescription;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -15,15 +15,12 @@ public class MedicalHistoryDto {
     @Getter
     @Setter
     public static class MedicalHistoryRequest {
-        private Long doctorId;
-        private Long patientId;
         private Long appointmentId;
         private LocalDate date;
         private String diagnosis;
         private String notes;
         private List<String> allergies;
         private List<String> chronicDiseases;
-        private List<Medicine> medicines;
         private List<LabResult> labResults;
     }
 
@@ -43,7 +40,7 @@ public class MedicalHistoryDto {
         private String notes;
         private List<String> allergies;
         private List<String> chronicDiseases;
-        private List<Medicine> medicines;
+        private List<Prescription> prescriptions;
         private List<LabResult> labResults;
     }
 

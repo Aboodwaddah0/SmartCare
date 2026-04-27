@@ -3,9 +3,11 @@ package com.example.SmartCare.service;
 import com.example.SmartCare.dto.MedicalHistoryDto;
 import com.example.SmartCare.entity.Appointment;
 import com.example.SmartCare.entity.MedicalRecord;
+import com.example.SmartCare.entity.Prescription;
 import com.example.SmartCare.exception.ResourceNotFoundException;
 import com.example.SmartCare.repository.AppointmentRepository;
 import com.example.SmartCare.repository.MedicalHistoryRepository;
+import com.example.SmartCare.repository.PrescriptionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,11 +17,12 @@ public class MedicalHistoryService {
 
     private final MedicalHistoryRepository medicalHistoryRepository;
     private final AppointmentRepository appointmentRepository;
-
+    private final PrescriptionRepository prescriptionRepository;
     public MedicalHistoryService(MedicalHistoryRepository medicalHistoryRepository,
-                                AppointmentRepository appointmentRepository) {
+                                 AppointmentRepository appointmentRepository, PrescriptionRepository prescriptionRepository) {
         this.medicalHistoryRepository = medicalHistoryRepository;
         this.appointmentRepository = appointmentRepository;
+        this.prescriptionRepository = prescriptionRepository;
     }
 
     public List<MedicalHistoryDto.MedicalHistoryResponse> viewMedicalHistory(Long patientId) {
@@ -47,7 +50,6 @@ public class MedicalHistoryService {
                 .notes(request.getNotes())
                 .allergies(request.getAllergies())
                 .chronicDiseases(request.getChronicDiseases())
-                .medicines(request.getMedicines())
                 .labResults(request.getLabResults())
                 .build();
 
@@ -69,7 +71,6 @@ public class MedicalHistoryService {
         record.setNotes(request.getNotes());
         record.setAllergies(request.getAllergies());
         record.setChronicDiseases(request.getChronicDiseases());
-        record.setMedicines(request.getMedicines());
         record.setLabResults(request.getLabResults());
 
         MedicalRecord updated = medicalHistoryRepository.save(record);
@@ -86,6 +87,8 @@ public class MedicalHistoryService {
     }
 
     private MedicalHistoryDto.MedicalHistoryResponse mapToDto(MedicalRecord record) {
+        List<Prescription> prescriptions = prescriptionRepository.findByPatientId(record.getPatientId());
+
         return MedicalHistoryDto.MedicalHistoryResponse.builder()
                 .id(record.getId())
                 .patientId(record.getPatientId())
@@ -96,7 +99,7 @@ public class MedicalHistoryService {
                 .notes(record.getNotes())
                 .allergies(record.getAllergies())
                 .chronicDiseases(record.getChronicDiseases())
-                .medicines(record.getMedicines())
+                .prescriptions(prescriptions)
                 .labResults(record.getLabResults())
                 .build();
     }

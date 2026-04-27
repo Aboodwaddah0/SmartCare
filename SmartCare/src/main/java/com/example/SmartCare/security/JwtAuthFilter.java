@@ -1,5 +1,6 @@
 package com.example.SmartCare.security;
 
+import com.example.SmartCare.exception.JwtAuthenticationException;
 import com.example.SmartCare.service.CustomUserDetailsService;
 import com.example.SmartCare.service.JwtService;
 import io.jsonwebtoken.JwtException;
@@ -50,9 +51,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             username = jwtService.extractUsername(jwt);
 
         } catch (JwtException | IllegalArgumentException e) {
-
-            filterChain.doFilter(request, response);
-            return;
+            throw new JwtAuthenticationException("Invalid or expired token");
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -73,6 +72,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 );
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+            } else {
+                throw new JwtAuthenticationException("Invalid or expired token");
             }
         }
 

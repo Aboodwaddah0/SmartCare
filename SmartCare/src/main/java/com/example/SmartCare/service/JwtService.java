@@ -38,7 +38,7 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    // Generic method to extract any claim
+
     public <T> T extractClaim(String token, Function<Claims, T> resolver) {
         final Claims claims = extractAllClaims(token);
         return resolver.apply(claims);
