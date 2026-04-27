@@ -7,13 +7,11 @@ target/
 ### STS ###
 .apt_generated
 .classpath
-.idea/
 .factorypath
 .project
 .settings
 .springBeans
 .sts4-cache
-application.properties
 ### IntelliJ IDEA ###
 .idea
 *.iws
