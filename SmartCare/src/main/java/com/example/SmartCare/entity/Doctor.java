@@ -16,8 +16,8 @@ import java.util.List;
 @Setter
 @Getter
 @Builder
-
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "doctors")
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Doctor {
 
     @Id
@@ -36,7 +36,6 @@ public class Doctor {
     private String profilePic;
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @Builder.Default
     private List<DoctorSchedule> schedules = new ArrayList<>();
 
 

@@ -112,14 +112,23 @@ public void  bookAppointment(AppointmentDto.BookingRequest request){
     }
 
 
-    public List<AppointmentDto.AppointmentResponse> getAllAppointments(Long doctorId, LocalDate date){
+public List<AppointmentDto.AppointmentResponse> getAllAppointments(Long doctorId, LocalDate date){
 
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + doctorId));
 
      return appointmentRepository.findByDoctorIdAndDateOrderByTimeAsc(doctorId,date).stream().map(this::toDto).toList();
 
+    }
 
+    public List<AppointmentDto.AppointmentResponse> getPatientAppointments(Long patientId) {
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + patientId));
+
+        return appointmentRepository.findByPatientIdOrderByDateDescTimeAsc(patientId)
+                .stream()
+                .map(this::toDto)
+                .toList();
     }
 
     public List<LocalTime> getAvailableSlots(Long doctorId, LocalDate date) {

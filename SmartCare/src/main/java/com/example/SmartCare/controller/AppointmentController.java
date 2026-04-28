@@ -41,6 +41,15 @@ public class AppointmentController {
         );
     }
 
+    @GetMapping("/patient/{patientId}")
+    @PreAuthorize("hasAnyRole('PATIENT','ADMIN')")
+    public ResponseEntity<List<AppointmentDto.AppointmentResponse>> getPatientAppointments(
+            @PathVariable Long patientId) {
+        return ResponseEntity.ok(
+                appointmentService.getPatientAppointments(patientId)
+        );
+    }
+
 @PreAuthorize("hasRole('PATIENT')")
   @PostMapping("")
   public ResponseEntity<ApiResponse> bookAppointment(
