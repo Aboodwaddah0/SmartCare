@@ -19,7 +19,6 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Service
-@Transactional
 public class AppointmentService {
 
 private final DoctorRepository doctorRepository;
@@ -35,7 +34,7 @@ public AppointmentService(DoctorRepository doctorRepository, PatientRepository p
     this.doctorScheduleService = doctorScheduleService;
 }
 
-
+    @Transactional
 public void  bookAppointment(AppointmentDto.BookingRequest request){
 
     Doctor doctor = doctorRepository.findById(request.getDoctorId())
@@ -95,6 +94,22 @@ public void  bookAppointment(AppointmentDto.BookingRequest request){
         appointmentRepository.save(appointment);
     }
 
+    public void complete(Long appointmentId) {
+
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
+
+        if (appointment.getStatus() == AppointmentStatus.COMPLETED) {
+            throw new BusinessException("Appointment already completed", HttpStatus.BAD_REQUEST);
+        }
+
+        if (appointment.getStatus() == AppointmentStatus.CANCELLED) {
+            throw new BusinessException("Cannot complete a cancelled appointment", HttpStatus.BAD_REQUEST);
+        }
+
+        appointment.setStatus(AppointmentStatus.COMPLETED);
+        appointmentRepository.save(appointment);
+    }
 
 
     public List<AppointmentDto.AppointmentResponse> getAllAppointments(Long doctorId, LocalDate date){

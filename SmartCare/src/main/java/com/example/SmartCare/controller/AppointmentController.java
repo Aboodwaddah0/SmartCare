@@ -50,13 +50,22 @@ public class AppointmentController {
   }
 
 @PreAuthorize("hasRole('PATIENT')")
-  @PatchMapping ("/{appointmentId}")
-  public ResponseEntity<ApiResponse> cancelAppointment(
-          @PathVariable Long appointmentId) {
+   @PatchMapping ("/{appointmentId}")
+   public ResponseEntity<ApiResponse> cancelAppointment(
+           @PathVariable Long appointmentId) {
 
-   appointmentService.cancel(appointmentId);
-   return ResponseEntity.ok(ApiResponse.success("Appointment cancelled successfully"));
-  }
+    appointmentService.cancel(appointmentId);
+    return ResponseEntity.ok(ApiResponse.success("Appointment cancelled successfully"));
+   }
+
+@PreAuthorize("hasRole('DOCTOR')")
+   @PatchMapping ("/{appointmentId}/complete")
+   public ResponseEntity<ApiResponse> completeAppointment(
+           @PathVariable Long appointmentId) {
+
+    appointmentService.complete(appointmentId);
+    return ResponseEntity.ok(ApiResponse.success("Appointment completed successfully"));
+   }
 
  @PreAuthorize("isAuthenticated()")
  @GetMapping("/available-slots/{doctorId}")

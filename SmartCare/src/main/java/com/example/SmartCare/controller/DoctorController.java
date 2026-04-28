@@ -58,8 +58,8 @@ public class DoctorController {
     }
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('PATIENT') ")
-    @GetMapping("/specialty/{specialty}")
-    public ResponseEntity<List<DoctorResponse>> getDoctorsBySpecialty(@PathVariable String specialty) {
+    @GetMapping("/specialty")
+    public ResponseEntity<List<DoctorResponse>> getDoctorsBySpecialty(@RequestParam String specialty) {
         List<Doctor> doctors = doctorService.getDoctorsBySpecialty(specialty);
         List<DoctorResponse> responses = doctors.stream()
                 .map(this::mapToDoctorResponse)

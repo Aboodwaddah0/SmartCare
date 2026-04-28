@@ -15,7 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 @Getter
-@SuperBuilder
+@Builder
+
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "doctors")
 public class Doctor {
 

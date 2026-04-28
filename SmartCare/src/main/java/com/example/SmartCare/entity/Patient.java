@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 @Getter
-@SuperBuilder
+@Builder
 public class Patient {
 
     @Id
@@ -36,7 +36,6 @@ public class Patient {
     private String gender;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @Builder.Default
     private List<Appointment> appointments = new ArrayList<>();
 
 
