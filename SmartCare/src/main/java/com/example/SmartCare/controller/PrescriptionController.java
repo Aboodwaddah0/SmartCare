@@ -4,7 +4,6 @@ import com.example.SmartCare.dto.ApiResponse;
 import com.example.SmartCare.dto.PrescriptionDto;
 import com.example.SmartCare.service.PrescriptionService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +19,6 @@ public class PrescriptionController {
     }
 
 
-    @PreAuthorize("hasRole('DOCTOR')")
     @PostMapping
     public ResponseEntity<PrescriptionDto.PrescriptionResponse> create(
             @RequestBody PrescriptionDto.prescriptionRequest request) {
@@ -31,7 +29,6 @@ public class PrescriptionController {
     }
 
 
-    @PreAuthorize("hasRole('DOCTOR')")
     @PutMapping("/{prescriptionId}")
     public ResponseEntity<PrescriptionDto.PrescriptionResponse> update(
             @PathVariable String prescriptionId,
@@ -43,7 +40,6 @@ public class PrescriptionController {
     }
 
 
-    @PreAuthorize("hasRole('DOCTOR')")
     @DeleteMapping("/{prescriptionId}")
     public ResponseEntity<ApiResponse> delete(@PathVariable String prescriptionId) {
 
@@ -54,7 +50,6 @@ public class PrescriptionController {
         );
     }
 
-    @PreAuthorize("hasAnyRole('PATIENT','DOCTOR')")
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<?> getPatientPrescriptions(@PathVariable Long patientId) {
 

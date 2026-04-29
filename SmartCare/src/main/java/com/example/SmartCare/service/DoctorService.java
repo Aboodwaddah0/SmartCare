@@ -8,6 +8,7 @@ import com.example.SmartCare.exception.ResourceAlreadyExistsException;
 import com.example.SmartCare.exception.ResourceNotFoundException;
 import com.example.SmartCare.repository.DoctorRepository;
 import com.example.SmartCare.repository.UserRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -63,6 +64,10 @@ public class DoctorService {
     public Doctor getDoctorById(Long id){
         return doctorRepository.findById(id).orElse(null);
     }
+
+
+
+
 
     public List<Doctor> getAllDoctors(){
         return doctorRepository.findAll();

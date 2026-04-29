@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.cglib.core.Local;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -146,6 +147,28 @@ public List<AppointmentDto.AppointmentResponse> getAllAppointments(Long doctorId
         allSlots.removeAll(bookedSlots);
 
         return allSlots;
+    }
+
+
+    @Scheduled(fixedRate = 60000)
+    public void monitorAppointments() {
+
+        List<Appointment> appointments =
+                appointmentRepository.findByStatus(AppointmentStatus.SCHEDULED);
+
+        LocalDate today = LocalDate.now();
+        LocalTime nowTime = LocalTime.now();
+
+        for (Appointment a : appointments) {
+
+            if (a.getDate() != null && a.getTime() != null
+                    && (a.getDate().isBefore(today)
+                    || (a.getDate().isEqual(today) && a.getTime().isBefore(nowTime)))) {
+
+                a.setStatus(AppointmentStatus.COMPLETED);
+                appointmentRepository.save(a);
+            }
+        }
     }
 
 

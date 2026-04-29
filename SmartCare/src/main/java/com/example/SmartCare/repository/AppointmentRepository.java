@@ -1,6 +1,7 @@
 package com.example.SmartCare.repository;
 
 import com.example.SmartCare.entity.Appointment;
+import com.example.SmartCare.entity.AppointmentStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,4 +19,5 @@ public interface AppointmentRepository  extends JpaRepository<Appointment, Long>
     boolean existsByDoctorIdAndDateAndTime(Long doctorId, LocalDate date, LocalTime time);
     List<Appointment> findByDoctorIdAndDateOrderByTimeAsc(Long doctorId, LocalDate date);
     List<Appointment> findByPatientIdOrderByDateDescTimeAsc(Long patientId);
+    List<Appointment> findByStatus(AppointmentStatus status);
 }

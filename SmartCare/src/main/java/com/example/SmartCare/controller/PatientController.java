@@ -6,7 +6,6 @@ import com.example.SmartCare.dto.ApiResponse;
 import com.example.SmartCare.entity.Patient;
 import com.example.SmartCare.service.PatientService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +22,6 @@ public class PatientController {
     }
 
 @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> createPatient(@RequestBody UserDto.CreatePatientRequest request) {
         patientService.createPatient(request);
         return ResponseEntity.ok(ApiResponse.success("Patient created successfully"));
@@ -31,7 +29,6 @@ public class PatientController {
 
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR') or hasRole('PATIENT')")
     public ResponseEntity<PatientResponse> getPatientById(@PathVariable Long id) {
         Patient patient = patientService.getPatientById(id);
         if (patient == null) {
@@ -41,7 +38,6 @@ public class PatientController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR')")
     public ResponseEntity<List<PatientResponse>> getAllPatients() {
         List<PatientResponse> responses = patientService.getAllPatients().stream()
                 .map(this::mapToPatientResponse)
@@ -50,21 +46,18 @@ public class PatientController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> deletePatient(@PathVariable Long id) {
         patientService.deletePatient(id);
         return ResponseEntity.ok(ApiResponse.success("Patient deleted successfully"));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('PATIENT')")
     public ResponseEntity<PatientResponse> updatePatient(@PathVariable Long id, @RequestBody Patient patient) {
         Patient updatedPatient = patientService.updatePatient(id, patient);
         return ResponseEntity.ok(mapToPatientResponse(updatedPatient));
     }
 
     @GetMapping("/search/{username}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR') or hasRole('PATIENT')")
     public ResponseEntity<List<PatientResponse>> searchPatientByUsername(@PathVariable String username) {
         List<Patient> patient = patientService.getPatientByName(username);
        List <PatientResponse> patientResponses=patient.stream().map(this::mapToPatientResponse).toList();

@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @Builder
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+
 public class Doctor {
 
     @Id

@@ -4,7 +4,6 @@ import com.example.SmartCare.dto.ApiResponse;
 import com.example.SmartCare.dto.MedicalHistoryDto;
 import com.example.SmartCare.service.MedicalHistoryService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,7 +16,6 @@ public class MedicalHistoryController {
         this.medicalHistoryService = medicalHistoryService;
     }
 
-    @PreAuthorize("hasRole('DOCTOR')")
     @PostMapping
     public ResponseEntity<MedicalHistoryDto.MedicalHistoryResponse> create(
             @RequestBody MedicalHistoryDto.MedicalHistoryRequest request) {
@@ -26,7 +24,6 @@ public class MedicalHistoryController {
         );
     }
 
-    @PreAuthorize("hasRole('DOCTOR')")
     @PutMapping("/{id}")
     public ResponseEntity<MedicalHistoryDto.MedicalHistoryResponse> update(
             @PathVariable String id,
@@ -36,7 +33,6 @@ public class MedicalHistoryController {
         );
     }
 
-    @PreAuthorize("hasRole('DOCTOR')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> delete(@PathVariable String id) {
         medicalHistoryService.deleteMedicalHistory(id);
@@ -45,7 +41,6 @@ public class MedicalHistoryController {
         );
     }
 
-    @PreAuthorize("hasAnyRole('PATIENT','DOCTOR','ADMIN')")
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<?> getPatientMedicalHistory(@PathVariable Long patientId) {
         return ResponseEntity.ok(

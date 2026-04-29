@@ -5,8 +5,8 @@ import com.example.SmartCare.dto.UserDto.DoctorResponse;
 import com.example.SmartCare.dto.ApiResponse;
 import com.example.SmartCare.entity.Doctor;
 import com.example.SmartCare.service.DoctorService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,12 +22,10 @@ public class DoctorController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> createDoctor(@RequestBody UserDto.CreateDoctorRequest request) {
         doctorService.createDoctor(request);
         return ResponseEntity.ok(ApiResponse.success("Doctor created successfully"));
     }
-    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCTOR') or hasRole('PATIENT')")
     @GetMapping("/{id}")
     public ResponseEntity<DoctorResponse> getDoctorById(@PathVariable Long id) {
         Doctor doctor = doctorService.getDoctorById(id);
@@ -38,6 +36,7 @@ public class DoctorController {
     }
 
     @GetMapping
+    @Cacheable("doctors")
     public ResponseEntity<List<DoctorResponse>> getAllDoctors() {
         List<DoctorResponse> responses = doctorService.getAllDoctors().stream()
                 .map(this::mapToDoctorResponse)
@@ -57,7 +56,6 @@ public class DoctorController {
         return ResponseEntity.ok(mapToDoctorResponse(updatedDoctor));
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('PATIENT') ")
     @GetMapping("/specialty")
     public ResponseEntity<List<DoctorResponse>> getDoctorsBySpecialty(@RequestParam String specialty) {
         List<Doctor> doctors = doctorService.getDoctorsBySpecialty(specialty);

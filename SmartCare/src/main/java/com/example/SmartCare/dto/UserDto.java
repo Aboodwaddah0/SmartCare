@@ -96,4 +96,7 @@ public class UserDto {
         private String bloodType;
         private Role role;
     }
+
+
+
 }

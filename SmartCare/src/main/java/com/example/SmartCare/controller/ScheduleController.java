@@ -8,7 +8,6 @@ import com.example.SmartCare.repository.DoctorRepository;
 import com.example.SmartCare.service.DoctorScheduleService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -25,7 +24,6 @@ public class ScheduleController {
         this.doctorScheduleService = doctorScheduleService;
         this.doctorRepository = doctorRepository;
     }
-    @PreAuthorize("hasAnyRole('DOCTOR','ADMIN')")
     @PostMapping("/{doctorId}")
     public ResponseEntity<ScheduledDto.ScheduleResponse> createSchedule ( @PathVariable Long doctorId , @RequestBody ScheduledDto.ScheduleRequest request){
         Doctor doctor = doctorRepository.findById(doctorId)

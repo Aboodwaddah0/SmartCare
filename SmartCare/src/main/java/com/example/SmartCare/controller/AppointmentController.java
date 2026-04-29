@@ -10,7 +10,6 @@ import com.example.SmartCare.repository.AppointmentRepository;
 import com.example.SmartCare.service.AppointmentService;
 import com.example.SmartCare.service.PrescriptionService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -31,7 +30,6 @@ public class AppointmentController {
 
 
     @GetMapping("/doctor/{doctorId}")
-    @PreAuthorize("hasAnyRole('DOCTOR','ADMIN')")
     public ResponseEntity<List<AppointmentDto.AppointmentResponse>> getAppointmentsDoctor(
             @PathVariable Long doctorId,
             @RequestParam LocalDate date) {
@@ -42,7 +40,6 @@ public class AppointmentController {
     }
 
     @GetMapping("/patient/{patientId}")
-    @PreAuthorize("hasAnyRole('PATIENT','ADMIN')")
     public ResponseEntity<List<AppointmentDto.AppointmentResponse>> getPatientAppointments(
             @PathVariable Long patientId) {
         return ResponseEntity.ok(
@@ -50,16 +47,14 @@ public class AppointmentController {
         );
     }
 
-@PreAuthorize("hasRole('PATIENT')")
-  @PostMapping("")
+   @PostMapping("")
   public ResponseEntity<ApiResponse> bookAppointment(
           @RequestBody AppointmentDto.BookingRequest request) {
    appointmentService.bookAppointment(request);
    return ResponseEntity.ok(ApiResponse.success("Appointment booked successfully"));
   }
 
-@PreAuthorize("hasRole('PATIENT')")
-   @PatchMapping ("/{appointmentId}")
+    @PatchMapping ("/{appointmentId}")
    public ResponseEntity<ApiResponse> cancelAppointment(
            @PathVariable Long appointmentId) {
 
@@ -67,8 +62,7 @@ public class AppointmentController {
     return ResponseEntity.ok(ApiResponse.success("Appointment cancelled successfully"));
    }
 
-@PreAuthorize("hasRole('DOCTOR')")
-   @PatchMapping ("/{appointmentId}/complete")
+    @PatchMapping ("/{appointmentId}/complete")
    public ResponseEntity<ApiResponse> completeAppointment(
            @PathVariable Long appointmentId) {
 
@@ -76,8 +70,7 @@ public class AppointmentController {
     return ResponseEntity.ok(ApiResponse.success("Appointment completed successfully"));
    }
 
- @PreAuthorize("isAuthenticated()")
- @GetMapping("/available-slots/{doctorId}")
+  @GetMapping("/available-slots/{doctorId}")
  public ResponseEntity<List<LocalTime>> getAvailableSlots(
          @PathVariable Long doctorId,
          @RequestParam LocalDate date) {
