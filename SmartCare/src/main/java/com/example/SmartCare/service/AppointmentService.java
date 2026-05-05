@@ -27,6 +27,7 @@ private final PatientRepository patientRepository;
 private final AppointmentRepository appointmentRepository;
 private final ScheduleRepository scheduleRepository;
 private final DoctorScheduleService doctorScheduleService;
+
 public AppointmentService(DoctorRepository doctorRepository, PatientRepository patientRepository, AppointmentRepository appointmentRepository, ScheduleRepository scheduleRepository, DoctorScheduleService doctorScheduleService) {
     this.doctorRepository = doctorRepository;
     this.patientRepository = patientRepository;

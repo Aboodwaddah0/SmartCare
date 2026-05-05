@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/medical-history")
+@RequestMapping("/api/v1/medical-history")
 public class MedicalHistoryController {
 
     private final MedicalHistoryService medicalHistoryService;
