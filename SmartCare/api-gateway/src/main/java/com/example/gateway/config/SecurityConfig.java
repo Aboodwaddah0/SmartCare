@@ -19,7 +19,7 @@ public class SecurityConfig {
 	@Bean
 	public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
 		return http
-				.csrf(ServerHttpSecurity.CsrfSpec::disable)
+				.csrf(csrf -> csrf.disable())
 				.authorizeExchange(exchanges -> exchanges
 						.pathMatchers("/api/v2/auth/**").permitAll()
 						.pathMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
