@@ -1,0 +1,45 @@
+package com.example.appointment.dto;
+
+import lombok.*;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+public class AppointmentDto {
+
+	@NoArgsConstructor
+	@AllArgsConstructor
+	@Builder
+	@Getter
+	@Setter
+	public static class BookingRequest {
+		private Long doctorId;
+		private Long patientId;
+		private LocalDate date;
+		private LocalTime time;
+	}
+
+	@NoArgsConstructor
+	@AllArgsConstructor
+	@Builder
+	@Getter
+	@Setter
+	public static class BookingResponse {
+		private Long doctorId;
+		private Long patientId;
+		private LocalDate date;
+		private LocalTime time;
+	}
+
+	@Getter
+	@Setter
+	@Builder
+	public static class AppointmentResponse {
+		private Long id;
+		private Long doctorId;
+		private Long patientId;
+		private LocalDate date;
+		private LocalTime time;
+		private String status;
+	}
+}
