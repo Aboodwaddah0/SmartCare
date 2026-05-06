@@ -13,16 +13,16 @@ public class GatewayRouteConfig {
 		return builder.routes()
 				.route("main-service", r -> r
 						.path("/api/v2/users/**", "/api/v2/doctors/**", "/api/v2/patients/**")
-						.uri("http://localhost:8091"))
+						.uri("lb://main-service"))
 				.route("appointment-service", r -> r
 						.path("/api/v2/appointments/**", "/api/v2/slots/**", "/api/v2/schedule/**")
-						.uri("http://localhost:8092"))
+						.uri("lb://appointment-service"))
 				.route("medical-record-service", r -> r
 						.path("/api/v2/prescriptions/**", "/api/v2/medical-history/**")
-						.uri("http://localhost:8093"))
+						.uri("lb://medical-record-service"))
 				.route("chatbot-service", r -> r
 						.path("/api/v2/chat/**")
-						.uri("http://localhost:8094"))
+						.uri("lb://chatbot-service"))
 				.build();
 	}
 }

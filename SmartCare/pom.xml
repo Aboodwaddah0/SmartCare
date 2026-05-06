@@ -28,6 +28,7 @@
 		<module>appointment-service</module>
 		<module>medical-record-service</module>
 		<module>chatbot-service</module>
+		<module>eureka-server</module>
 	</modules>
 
 	<dependencyManagement>
