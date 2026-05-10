@@ -7,6 +7,7 @@ A comprehensive healthcare management system split into microservices built with
 - [Services](#services)
 - [Technology Stack](#technology-stack)
 - [Project Structure](#project-structure)
+- [Docker Setup](#docker-setup)
 - [Prerequisites](#prerequisites)
 - [Installation & Setup](#installation--setup)
 - [Configuration](#configuration)
@@ -137,6 +138,90 @@ SmartCare/
         ├── dto/
         └── service/
 ```
+
+## Docker Setup
+
+The entire stack (all 6 services + MySQL + MongoDB + Redis) can be started with a single command.
+
+### Prerequisites
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) (includes Docker Compose)
+
+### Quick Start
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/yourusername/SmartCare.git
+cd SmartCare
+
+# 2. Copy the example env file and fill in your values
+cp .env.example .env
+
+# 3. Build all images and start every container
+docker-compose up --build
+
+# 4. (subsequent runs — no rebuild needed)
+docker-compose up
+```
+
+All services will be available once the Eureka dashboard at http://localhost:8761 shows all six registered instances.
+
+### Default Credentials
+
+| Setting | Value |
+|---|---|
+| MySQL root password | `1234` |
+| MySQL database | `smartcare` |
+| MongoDB database | `smartcare_db` (no auth) |
+| Redis | no auth |
+| API Gateway | http://localhost:8080 |
+
+### Container Ports
+
+| Container | Host Port |
+|---|---|
+| api-gateway | 8080 |
+| eureka-server | 8761 |
+| main-service | 8091 |
+| appointment-service | 8092 |
+| medical-record-service | 8093 |
+| chatbot-service | 8094 |
+| MySQL | 3306 |
+| MongoDB | 27018 |
+| Redis | 6379 |
+
+### Useful Commands
+
+```bash
+# View running containers and health status
+docker-compose ps
+
+# Stream logs for a specific service
+docker-compose logs -f api-gateway
+
+# Rebuild a single service after code changes
+docker-compose up --build main-service
+
+# Stop all containers
+docker-compose down
+
+# Stop and remove all volumes (resets databases)
+docker-compose down -v
+```
+
+### Environment Variables (`.env`)
+
+Copy `.env.example` to `.env` and set:
+
+| Variable | Description |
+|---|---|
+| `MYSQL_ROOT_PASSWORD` | MySQL root password |
+| `MYSQL_DATABASE` | MySQL database name |
+| `JWT_SECRET` | Base64-encoded JWT signing key |
+| `JWT_EXPIRATION` | Token expiry in milliseconds |
+| `GROQ_API_KEY` | Groq API key for the chatbot service |
+
+---
 
 ## Prerequisites
 
